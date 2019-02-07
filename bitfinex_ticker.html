@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<div id="btc"></div>
+
+<script>
+
+var ws = new WebSocket("wss://api.bitfinex.com/ws");
+
+ws.onopen = function(){
+	ws.send(JSON.stringify(
+		{"event":"subscribe", "channel":"ticker","pair":"BTCUSD"}))};
+
+ws.onmessage = function(msg){
+	var response = JSON.parse(msg.data); 
+	var hb = response[1]; 
+	if(hb != "hb"){
+		document.getElementById("btc").innerHTML = "Channel Identifier: " + response[0] + "<br> Someone brave is bidding for btc at $ " + response[7] + "<br> Highest 💀💀  Bitcoin Price Today: $ " + response[9] + "<br> Amount of BTC Jason Just Bought in 🎌: " + response[2] + "<br> Daily Volume Stuart 💪 trades every night: " + " " + response[8] + " BTC" + "<br> (Last 24 hrs) Bitcoin has gone up: " + response[5] + " USD" + "▲"  ;
+	}};
+
+</script>
+</html>

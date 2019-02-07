@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="instascan.min.js"></script>
+</head>
+<body>
+	<video id="qrcam"></video>
+	<br>
+	<input type="text" id="wallet_address">
+<script>
+var qr = new Instascan.Scanner({
+	video: document.getElementById("qrcam")
+});	
+qr.addListener('scan', function(data){
+	//console.log(data);
+	document.getElementById("wallet_address").value = data;
+
+});
+
+Instascan.Camera.getCameras().then(function(cams){
+	qr.start(cams[0]);
+}).catch(function(err){console.log(err);
+});
+</script>
+</body>
+</html>

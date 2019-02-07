@@ -1,0 +1,33 @@
+<html>
+<img src="http://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=13T4E6GfFXTDHwfBuGKqcjiHMYmsjQapbz">
+<br>
+Bitcoin Donation Address: 
+<br>
+13T4E6GfFXTDHwfBuGKqcjiHMYmsjQapbz
+<br>
+<br>
+<div id="socket">
+	Monitoring...
+</div>
+<script>
+	var bitcoin_socket = new WebSocket("wss://ws.blockchain.info/inv");
+	bitcoin_socket.onopen = function(){
+		bitcoin_socket.send(JSON.stringify({"op":"addr_sub", "addr":"13T4E6GfFXTDHwfBuGKqcjiHMYmsjQapbz"}));
+	};
+	bitcoin_socket.onmessage = function(msg){
+		var in_response = JSON.parse(msg.data);
+		//console.log(in_response);
+		var outputs = in_response.x.out;
+		var num_outputs = outputs.length();
+		for(i=0; i<num_outputs; i++){
+			var target_address = "13T4E6GfFXTDHwfBuGKqcjiHMYmsjQapbz";
+			var address_check = in_response.x.out[i].addr;
+			if(address_check == target_address){
+				var satoshis_transferred = in_response.x.out[i].value;
+				var bitcoins_transferred = satoshis_transferred/100000000;
+				document.getElementById("socket").innerHTML = "Received: " + bitcoins_transferred + "BTC " + "(1 Confirmation)";
+			};
+		};
+	};
+</script>
+</html>
